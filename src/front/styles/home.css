@@ -20,15 +20,24 @@
 }
 #add_medication {
     background-color: #58D68D;
+    width: 30px;
+    border-radius: 40%;
 }
 body {
     background-color: #F8F9F9;
     font-family: montserrat;
 }
-#add_medication {
-    width: 40px;
-    border-radius: 80%;
-}
 #plus {
-    font-size: 37px;
+    font-size: 32px;
+}
+#am {
+    color: #2C3E50;
+}
+#login {
+    background-color: #2E86C1;
+    box-shadow: 10px 10px 5px lightgray;
+    border-radius: 10px;
+}
+#login_text{
+    color: white;
 }
