@@ -59,7 +59,7 @@ def signin():
     print(hashed_password.decode('utf-8'))
     
     
-    new_user = User(name=name, username=username, email=email, password=hashed_password.decode('utf-8'), salt=salt, profile_image_url=profile_image, more_info=more_info)
+    new_user = User(first_name=first_name, last_name=last_name, email=email, password=hashed_password.decode('utf-8'), salt=salt)
     db.session.add(new_user)
     db.session.commit()
 
