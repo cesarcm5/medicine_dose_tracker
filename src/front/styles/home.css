@@ -5,6 +5,39 @@
     one more css for each page that will contain the selected used 
     on that page only (the ones not reused in other pages).
 */
-#back {
+
+
+#navbar {
+    background-color: #2E86C1;
+}
+
+#pill {
+    width: 120px;
+}
+#name {
+    color: #F8F9F9;
+    font-size:40px;
+}
+#add_medication {
+    background-color: #58D68D;
+    width: 30px;
+    border-radius: 40%;
+}
+body {
     background-color: #F8F9F9;
+    font-family: montserrat;
+}
+#plus {
+    font-size: 32px;
+}
+#am {
+    color: #2C3E50;
+}
+#login {
+    background-color: #2E86C1;
+    box-shadow: 10px 10px 5px lightgray;
+    border-radius: 10px;
+}
+#login_text{
+    color: white;
 }
