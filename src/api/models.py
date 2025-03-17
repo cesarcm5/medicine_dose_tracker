@@ -12,13 +12,11 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     medicines = db.relationship("Medicine", back_populates="user", lazy=True)
     
-    def __init__(self, first_name, last_name, email, password, medicines, is_active=False):
+    def __init__(self, first_name, last_name, email, password, is_active=False):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.password = password
-        self.password = medicines
-        self.medicines = medicines
         self.is_active = is_active
 
 
@@ -29,6 +27,8 @@ class User(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
             "email": self.email,
             "medicines": self.medicines
             # do not serialize the password, its a security breach
@@ -39,15 +39,26 @@ class Medicine(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=False, nullable=False)
     dosage = db.Column(db.Integer(), unique=False, nullable=False)
-    pharmaceutical = db.Column(db.Integer(), unique=False, nullable=False)
-    frequency = db.Column(db.String(120), unique=False, nullable=False)
+    frequency = db.Column(db.Integer(), unique=False, nullable=False)
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id'), nullable=False)
     user = db.relationship("User", back_populates="medicines", lazy=True)
     
+    def __init__(self, name, dosage, frequency, user_id):
+        self.name = name,
+        self.dosage = dosage,
+        self.frequency = frequency
+        self.user_id = user_id
+    
 
     
-    def __repr__(self):
-        return f'<Medicine {self.name}>'
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "dosage": self.dosage,
+            "frequency": self.frequency,
+            "user_id": self.user_id
+        }
     
         
     
