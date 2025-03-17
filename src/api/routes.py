@@ -6,8 +6,7 @@ from api.models import db, User, Medicine
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
-import bcrypt
-
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 api = Blueprint('api', __name__)
@@ -25,6 +24,33 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+#MANTENER USUARIO LOGEADO
+@api.route("/user", methods=["GET"])
+@jwt_required()
+def get_user_logged():
+    current_user = get_jwt_identity()
+    print(f"Usuario actual: {current_user}")
+    user = User.query.filter_by(email=current_user).first()
+    return jsonify(user.serialize()),200
+
+#TRAER A TODOS LOS USERS
+@api.route('/users', methods=['GET'])
+def all_users():
+    users = User.query.all()
+    usuarios_serializados = [persona.serialize() for persona in users]
+    return jsonify(usuarios_serializados), 200
+
+#TRAER A UN SOLO USER POR EMAIL
+@api.route("/user/<string:email>", methods=["GET"])
+def get_user(email):
+    searched_user = User.query.filter_by(email=email).one_or_none() 
+
+    if searched_user is None:  
+        return jsonify({"error": f"Usuario con email: {email} no encontrado"}), 404
+    
+    usuario_serializado = searched_user.serialize() 
+    return jsonify(usuario_serializado), 200
+
 
 @api.route('/signin', methods=['POST'])
 def signin():
@@ -33,34 +59,27 @@ def signin():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
     
-    if first_name == None :
-        return jsonify({"msg":"first name field is missing"}), 401
+    if first_name is None:
+        return jsonify({"msg": "first name field is missing"}), 401
     
-    if last_name == None:
-        return jsonify({"msg":"last name field is missing"}), 401
+    if last_name is None:
+        return jsonify({"msg": "last name field is missing"}), 401
     
-    if email == None:
-        return jsonify({"msg":"email field is missing"})
+    if email is None:
+        return jsonify({"msg": "email field is missing"}), 401
     
-    if password == None: 
-        return jsonify({"msg":"password field is missing"})
+    if password is None:
+        return jsonify({"msg": "password field is missing"}), 401
     
     user = User.query.filter_by(email=email).first()
     
-    if user != None:
-        return jsonify({"msg":"The user already exist"}), 401
+    if user is not None:
+        return jsonify({"msg": "The user already exists"}), 401
     
-    
-    bpassword = bytes(password, 'UTF-8')
-    salt = bcrypt.gensalt(14)
-    
-    hashed_password = bcrypt.hashpw(password=bpassword, salt=salt)
-    
-    print(hashed_password.decode('utf-8'))
-    
-    
-    new_user = User(first_name=first_name, last_name=last_name, email=email, password=hashed_password.decode('utf-8'), salt=salt)
+    hashed_password = generate_password_hash(password)
+        
+    new_user = User(first_name=first_name, last_name=last_name, email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({"user": new_user.serialize(),"token": create_access_token(identity=email)}),200
+    return jsonify({"user": new_user.serialize(), "token": create_access_token(identity=email)}), 200
