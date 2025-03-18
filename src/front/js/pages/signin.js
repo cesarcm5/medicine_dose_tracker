@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { Context } from "../store/appContext";
+import { Link } from 'react-router-dom';
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-export const Signup = () => {
+export const Signin = () => {
+    const { store, actions } = useContext(Context);
     const [formData, setFormData] = useState({
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
-        firstName: "",
-        lastName: ""
+        passwordConfirm: ""
     });
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -16,11 +24,22 @@ export const Signup = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Aquí puedes agregar la lógica para manejar el registro
-        console.log("Form data submitted:", formData);
+        if (formData.password !== formData.passwordConfirm) {
+            toast.error("The passwords are not the same");
+            return;
+        }
+
+        await actions.signIn(formData.firstName, formData.lastName, formData.email, formData.password);
+        navigate("/landing");
     };
+
+    useEffect(() => {
+        if (store.token) {
+            navigate("/landing");
+        }
+    }, [store.token, navigate]);
 
     return (
         <div className="signup-form">
@@ -55,6 +74,14 @@ export const Signup = () => {
                     name="password"
                     placeholder="Password"
                     value={formData.password}
+                    onChange={handleChange}
+                    className="mb-4 p-2 border border-solid rounded-lg outline-none"
+                />
+                <input
+                    type="password"
+                    name="passwordConfirm"
+                    placeholder="Confirm Password"
+                    value={formData.passwordConfirm}
                     onChange={handleChange}
                     className="mb-4 p-2 border border-solid rounded-lg outline-none"
                 />
