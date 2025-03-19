@@ -25,12 +25,12 @@ export const Landing = () => {
     };
 
     return (
-        <div className="p-4">
+        <div className="">
             <Navbar />
             {/* Button to show/hide form */}
             <button
                 onClick={() => setShowForm(!showForm)}
-                className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600 transition"
+                className="bg-green-500 text-white px-4 py-2 mt-12 ml-15 rounded-md shadow-md hover:bg-green-600 transition"
             >
                 {showForm ? "Cancel" : "Add Medication"} +
             </button>
