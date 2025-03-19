@@ -52,6 +52,26 @@ def get_user(email):
     return jsonify(usuario_serializado), 200
 
 
+@api.route('/login', methods=["POST"])
+def login():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+    if email == None or password == None:
+        return jsonify({"msg": "Falta el correo o contraseña"}), 401
+    
+    user = User.query.filter(email=email).first()
+    if user == None:
+        return jsonify({"msg": "User not found"}), 401
+    
+    if not check_password_hash(user.password, password):
+        return jsonify({"msg": "Contraseña incorrecta"}), 401
+
+    # Generar un token de acceso si las credenciales son válidas
+    access_token = create_access_token(identity=user.email)
+    return jsonify({"msg": "Inicio de sesión exitoso", "token": access_token, "user": user.serialize()}), 200
+
+
+
 @api.route('/signin', methods=['POST'])
 def signin():
     first_name = request.json.get("first_name", None)
