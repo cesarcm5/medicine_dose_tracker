@@ -93,6 +93,42 @@ const getState = ({ getStore, getActions, setStore }) => {
 					toast.error("Signup error");
 				}
 			},
+			logIn: async (email, password) => {
+				const resp = await fetch(process.env.BACKEND_URL + "api/login", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						email: email,
+						password: password
+					})
+				})
+				const data = await resp.json()
+
+				if (resp.ok) {
+					localStorage.setItem("token", data.token)
+					setStore({ token: data.token });
+					toast.success("Your usser has been logged");
+					toast("We've login for you",
+						{
+							duration: 5000,
+						}
+					);
+				} else {
+					toast.error("Login error");
+				}
+			},
+			logout: () => {
+				localStorage.removeItem("token");
+				setStore({ token: null });
+				toast.success("Your usser has been logout");
+				toast("We've logout for you",
+					{
+						duration: 5000,
+					}
+				);
+			},
 		}
 	};
 };

@@ -8,7 +8,7 @@ class User(db.Model):
     first_name = db.Column(db.String(120), unique=True, nullable=False)
     last_name = db.Column(db.String(120), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(80), unique=False, nullable=False)
+    password = db.Column(db.String(255), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     medicines = db.relationship("Medicine", back_populates="user", lazy=True)
     
