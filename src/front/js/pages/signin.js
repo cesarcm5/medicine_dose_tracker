@@ -36,7 +36,8 @@ export const Signin = () => {
     };
 
     useEffect(() => {
-        if (store.token) {
+        const token = localStorage.getItem("token");
+        if (token && token !== "null" && token !== "undefined") {
             navigate("/landing");
         }
     }, [store.token, navigate]);
