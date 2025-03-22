@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Link } from 'react-router-dom';
+import Pill from "../../../../assets/medicine.png"
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -43,53 +44,62 @@ export const Signin = () => {
     }, [store.token, navigate]);
 
     return (
-        <div className="signup-form">
-            <h1>Sign Up</h1>
-            <form onSubmit={handleSubmit} className="flex flex-col">
-                <input
-                    type="text"
-                    name="firstName"
-                    placeholder="First Name"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    className="mb-4 p-2 border border-solid rounded-lg outline-none"
-                />
-                <input
-                    type="text"
-                    name="lastName"
-                    placeholder="Last Name"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    className="mb-4 p-2 border border-solid rounded-lg outline-none"
-                />
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="mb-4 p-2 border border-solid rounded-lg outline-none"
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="mb-4 p-2 border border-solid rounded-lg outline-none"
-                />
-                <input
-                    type="password"
-                    name="passwordConfirm"
-                    placeholder="Confirm Password"
-                    value={formData.passwordConfirm}
-                    onChange={handleChange}
-                    className="mb-4 p-2 border border-solid rounded-lg outline-none"
-                />
-                <button type="submit" className="p-2 bg-blue-500 text-white rounded-lg">
-                    Sign Up
-                </button>
-            </form>
+        <div>
+            <div id="login" className="w-35/100 justify-self-center mt-40">
+                <div className="justify-items-center">
+                    <img id="pill" src={Pill} />
+                </div>
+                <div>
+                    <p id="login_text" className="text-center text-3xl">Log In</p>
+                </div>
+                <form onSubmit={handleSubmit} id="credentials" className="pl-32 mt-15 flex flex-col">
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="First Name"
+                        value={formData.firstName}
+                        className="text-white color-none w-2/3 border border-solid rounded-lg outline-none p-2"
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Last Name"
+                        value={formData.lastName}
+                        className="text-white color-none w-2/3 border border-solid rounded-lg outline-none p-2 mt-10"
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="text"
+                        name="email"
+                        placeholder="email"
+                        value={formData.email}
+                        className="text-white color-none w-2/3 border border-solid rounded-lg outline-none mt-10 p-2"
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="password"
+                        name="name"
+                        value={formData.password}
+                        placeholder="Password"
+                        className="text-white color-none mt-10 w-2/3 border border-solid outline-none mt-10 rounded-lg p-2"
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="password"
+                        name="name"
+                        value={formData.passwordConfirm}
+                        placeholder="Confirm Password"
+                        className="text-white color-none mt-10 w-2/3 border border-solid outline-none rounded-lg p-2"
+                        onChange={handleChange}
+                    />
+                    <div className="mt-10 flex mb-10 gap-x-10 text-white">
+                        <button type="submit" className="border-b text-green-300">
+                            Login
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };
