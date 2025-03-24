@@ -59,7 +59,7 @@ def login():
     if email == None or password == None:
         return jsonify({"msg": "Falta el correo o contraseña"}), 401
     
-    user = User.query.filter(email=email).first()
+    user = User.query.filter_by(email=email).first()
     if user == None:
         return jsonify({"msg": "User not found"}), 401
     
