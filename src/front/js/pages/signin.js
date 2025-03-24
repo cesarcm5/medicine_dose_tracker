@@ -52,10 +52,10 @@ export const Signin = () => {
                 <div>
                     <p id="login_text" className="text-center text-3xl">Log In</p>
                 </div>
-                <form onSubmit={handleSubmit} id="credentials" className="pl-32 mt-15 flex flex-col">
+                <form onSubmit={handleSubmit} id="credentials" className="pl-32 mt-10 flex flex-col">
                     <input
                         type="text"
-                        name="name"
+                        name="firstName"
                         placeholder="First Name"
                         value={formData.firstName}
                         className="text-white color-none w-2/3 border border-solid rounded-lg outline-none p-2"
@@ -63,7 +63,7 @@ export const Signin = () => {
                     />
                     <input
                         type="text"
-                        name="name"
+                        name="lastName"
                         placeholder="Last Name"
                         value={formData.lastName}
                         className="text-white color-none w-2/3 border border-solid rounded-lg outline-none p-2 mt-10"
@@ -79,7 +79,7 @@ export const Signin = () => {
                     />
                     <input
                         type="password"
-                        name="name"
+                        name="password"
                         value={formData.password}
                         placeholder="Password"
                         className="text-white color-none mt-10 w-2/3 border border-solid outline-none mt-10 rounded-lg p-2"
@@ -87,7 +87,7 @@ export const Signin = () => {
                     />
                     <input
                         type="password"
-                        name="name"
+                        name="passwordConfirm"
                         value={formData.passwordConfirm}
                         placeholder="Confirm Password"
                         className="text-white color-none mt-10 w-2/3 border border-solid outline-none rounded-lg p-2"
