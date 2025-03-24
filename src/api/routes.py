@@ -24,6 +24,23 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+@api.route("/api/medicine", methods=['POST'])
+def register_medicine():
+    name = request.json.get("name", None)
+    dosage = request.json.get("dosage", None)
+    frequency = request.json.get("frequency", None)
+    user_id = request.json.get("user_id", None)
+    
+    if not all([name, dosage, frequency, user_id]):
+        return jsonify({"error":"Missing required field"}), 400
+    
+    medicine = Medicine(name=name, dosage=dosage, frequency=frequency, user_id=user_id)
+    db.session.add(medicine)
+    db.session.commit()
+    return jsonify(medicine.serialize()), 201
+    
+
+
 #MANTENER USUARIO LOGEADO
 @api.route("/user", methods=["GET"])
 @jwt_required()

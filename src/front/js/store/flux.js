@@ -59,6 +59,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//reset the global store
 				setStore({ demo: demo });
 			},
+
+
+
+
+			//USERS 
+
 			signIn: async (first_name, last_name, email, password) => {
 				console.log(email)
 				const resp = await fetch(process.env.BACKEND_URL + "api/signin", {
