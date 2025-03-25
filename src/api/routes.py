@@ -24,7 +24,7 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
-@api.route("/api/medicine", methods=['POST'])
+@api.route("/medicine", methods=['POST'])
 def register_medicine():
     name = request.json.get("name", None)
     dosage = request.json.get("dosage", None)
@@ -56,6 +56,7 @@ def all_users():
     users = User.query.all()
     usuarios_serializados = [persona.serialize() for persona in users]
     return jsonify(usuarios_serializados), 200
+
 
 #TRAER A UN SOLO USER POR EMAIL
 @api.route("/user/<string:email>", methods=["GET"])

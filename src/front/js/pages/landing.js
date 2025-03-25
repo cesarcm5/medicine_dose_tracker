@@ -6,22 +6,29 @@ import "../../styles/home.css";
 export const Landing = () => {
     const { store, actions } = useContext(Context);
 
-    const [showForm, setShowForm] = useState(false);
-    const [medicine, setMedicine] = useState({
-        name: "",
-        dosage: "",
-        frequency: "",
-    });
+    const [formData, setFormData] = useState({ name: "", dosage: "", frequency: "" });
+    const [medicines, setMedicines] = useState([]); // ← for the list
+
+    const [showForm, setShowForm] = useState(false)
+
 
     const handleChange = (e) => {
-        setMedicine({ ...medicine, [e.target.name]: e.target.value });
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Medicine Added:", medicine);
-        setMedicine({ name: "", dosage: "", frequency: "" }); // Reset form
-        setShowForm(false); // Hide form after submission
+        const newMedicine = await actions.RegisterMedicine(
+            formData.name,
+            formData.dosage,
+            formData.frequency,
+            store.user?.id
+        );
+        if (newMedicine) {
+            setMedicines([...medicines, newMedicine]);
+        }
+        setFormData({ name: "", dosage: "", frequency: "" });
+        setShowForm(false);
     };
 
     return (
@@ -42,7 +49,7 @@ export const Landing = () => {
                     <input
                         type="text"
                         name="name"
-                        value={medicine.name}
+                        value={formData.name}
                         onChange={handleChange}
                         className="w-full p-2 border rounded-md mb-2"
                         required
@@ -52,7 +59,7 @@ export const Landing = () => {
                     <input
                         type="text"
                         name="dosage"
-                        value={medicine.dosage}
+                        value={formData.dosage}
                         onChange={handleChange}
                         className="w-full p-2 border rounded-md mb-2"
                         placeholder="e.g. 500mg"
@@ -63,7 +70,7 @@ export const Landing = () => {
                     <input
                         type="text"
                         name="frequency"
-                        value={medicine.frequency}
+                        value={formData.frequency}
                         onChange={handleChange}
                         className="w-full p-2 border rounded-md mb-4"
                         placeholder="e.g. Twice a day"
