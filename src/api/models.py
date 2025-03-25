@@ -30,7 +30,7 @@ class User(db.Model):
             "first_name": self.first_name,
             "last_name": self.last_name,
             "email": self.email,
-            "medicines": self.medicines
+            "medicines": [medicine.serialize() for medicine in self.medicines]
             # do not serialize the password, its a security breach
         }
         

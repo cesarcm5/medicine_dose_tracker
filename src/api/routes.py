@@ -24,6 +24,23 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+@api.route("/medicine", methods=['POST'])
+def register_medicine():
+    name = request.json.get("name", None)
+    dosage = request.json.get("dosage", None)
+    frequency = request.json.get("frequency", None)
+    user_id = request.json.get("user_id", None)
+    
+    if not all([name, dosage, frequency, user_id]):
+        return jsonify({"error":"Missing required field"}), 400
+    
+    medicine = Medicine(name=name, dosage=dosage, frequency=frequency, user_id=user_id)
+    db.session.add(medicine)
+    db.session.commit()
+    return jsonify(medicine.serialize()), 201
+    
+
+
 #MANTENER USUARIO LOGEADO
 @api.route("/user", methods=["GET"])
 @jwt_required()
@@ -39,6 +56,7 @@ def all_users():
     users = User.query.all()
     usuarios_serializados = [persona.serialize() for persona in users]
     return jsonify(usuarios_serializados), 200
+
 
 #TRAER A UN SOLO USER POR EMAIL
 @api.route("/user/<string:email>", methods=["GET"])
@@ -59,7 +77,7 @@ def login():
     if email == None or password == None:
         return jsonify({"msg": "Falta el correo o contraseña"}), 401
     
-    user = User.query.filter(email=email).first()
+    user = User.query.filter_by(email=email).first()
     if user == None:
         return jsonify({"msg": "User not found"}), 401
     

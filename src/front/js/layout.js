@@ -8,6 +8,7 @@ import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import { Signin } from "./pages/signin";
 import injectContext from "./store/appContext";
+import PrivateRoute from "./privateRouter";
 import { Landing } from "./pages/landing"
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
@@ -30,7 +31,14 @@ const Layout = () => {
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
                         <Route element={<Signin />} path="/signin" />
-                        <Route element={<Landing />} path="/landing" />
+                        <Route
+                            path="/landing"
+                            element={
+                                <PrivateRoute>
+                                    <Landing />
+                                </PrivateRoute>
+                            }
+                        />
                     </Routes>
                     <Footer />
                 </ScrollToTop>

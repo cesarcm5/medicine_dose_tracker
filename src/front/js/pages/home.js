@@ -13,15 +13,12 @@ export const Home = () => {
 
 	const [login, setLogin] = useState(false)
 
-
-
 	useEffect(() => {
 		const token = localStorage.getItem("token");
-		if (token && token !== "null" && token !== "undefined") {
+		if (store.token && token && token !== "null" && token !== "undefined") {
 			navigate("/landing");
 		}
 	}, [store.token, navigate]);
-
 
 	return (
 		<div>
@@ -52,7 +49,18 @@ export const Home = () => {
 							<p className="">Don't have an acount?</p>
 							<Link to="signin" className="text-green-300 border-b pb-2">Sign up</Link>
 						</div>
-						<button onClick={() => actions.login(user.email, user.password)} className="border-b text-green-300">
+						<button
+							onClick={async (event) => {
+								event.preventDefault();
+								const success = await actions.logIn(user.email, user.password);
+								if (success) {
+									navigate("/landing");
+								} else {
+									alert("Invalid credentials.");
+								}
+							}}
+							className="border-b text-green-300"
+						>
 							Login
 						</button>
 					</div>

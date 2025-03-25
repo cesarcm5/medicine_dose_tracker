@@ -59,6 +59,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//reset the global store
 				setStore({ demo: demo });
 			},
+
+			// MEDICINES
+			RegisterMedicine: async (name, dosage, frequency, user_id) => {
+				const store = getStore();
+				const resp = await fetch(process.env.BACKEND_URL + "api/medicine", {
+					method: "POST",
+					headers: {
+						"Content-type": "application/json"
+					},
+					body: JSON.stringify({
+						name: name,
+						dosage: dosage,
+						frequency: frequency,
+						user_id: user_id || store.user?.id
+					})
+				});
+
+				const data = await resp.json();
+
+				if (resp.ok) {
+					toast.success("Medicine registered successfully");
+				} else {
+					toast.error("Failed to register medicine");
+					console.error("RegisterMedicine error:", data);
+				}
+			},
+
+
+			//USERS 
+
 			signIn: async (first_name, last_name, email, password) => {
 				console.log(email)
 				const resp = await fetch(process.env.BACKEND_URL + "api/signin", {

@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+import { Landing } from "./landing"
 import Pill from "../../../../assets/medicine.png"
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -39,7 +40,7 @@ export const Signin = () => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token && token !== "null" && token !== "undefined") {
-            navigate("/landing");
+            navigate({ Landing });
         }
     }, [store.token, navigate]);
 
