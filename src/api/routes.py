@@ -2,14 +2,18 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
+from flask_login import LoginManager, login_user, current_user
 from api.models import db, User, Medicine
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 api = Blueprint('api', __name__)
+
+login_manager = LoginManager()
+jwt = JWTManager()
 
 # Allow CORS requests to this API
 CORS(api)
@@ -24,21 +28,6 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
-@api.route("/medicine", methods=['POST'])
-def register_medicine():
-    name = request.json.get("name", None)
-    dosage = request.json.get("dosage", None)
-    frequency = request.json.get("frequency", None)
-    user_id = request.json.get("user_id", None)
-    
-    if not all([name, dosage, frequency, user_id]):
-        return jsonify({"error":"Missing required field"}), 400
-    
-    medicine = Medicine(name=name, dosage=dosage, frequency=frequency, user_id=user_id)
-    db.session.add(medicine)
-    db.session.commit()
-    return jsonify(medicine.serialize()), 201
-    
 
 
 #MANTENER USUARIO LOGEADO
@@ -85,7 +74,7 @@ def login():
         return jsonify({"msg": "Contraseña incorrecta"}), 401
 
     # Generar un token de acceso si las credenciales son válidas
-    access_token = create_access_token(identity=user.email)
+    access_token = create_access_token(identity=str(user.id))
     return jsonify({"msg": "Inicio de sesión exitoso", "token": access_token, "user": user.serialize()}), 200
 
 
@@ -121,3 +110,21 @@ def signin():
     db.session.commit()
 
     return jsonify({"user": new_user.serialize(), "token": create_access_token(identity=email)}), 200
+
+
+@api.route("/medicine", methods=['POST'])
+@jwt_required()
+def register_medicine():
+    name = request.json.get("name", None)
+    dosage = request.json.get("dosage", None)
+    frequency = request.json.get("frequency", None)
+    user_id = get_jwt_identity()
+    
+    if not all([name, dosage, frequency, user_id]):
+        return jsonify({"error":"Missing required field"}), 400
+    
+    medicine = Medicine(name=name, dosage=dosage, frequency=frequency, user_id=user_id)
+    db.session.add(medicine)
+    db.session.commit()
+    return jsonify(medicine.serialize()), 201
+    

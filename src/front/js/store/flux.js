@@ -61,29 +61,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			// MEDICINES
-			RegisterMedicine: async (name, dosage, frequency, user_id) => {
-				const store = getStore();
+			RegisterMedicine: async (name, dosage, frequency) => {
+				const token = localStorage.getItem('token');
+
 				const resp = await fetch(process.env.BACKEND_URL + "api/medicine", {
 					method: "POST",
 					headers: {
-						"Content-type": "application/json"
+						"Authorization": `Bearer ${token}`,
+						"Content-Type": "application/json"
 					},
 					body: JSON.stringify({
 						name: name,
 						dosage: dosage,
-						frequency: frequency,
-						user_id: user_id || store.user?.id
+						frequency: frequency
 					})
 				});
 
-				const data = await resp.json();
-
-				if (resp.ok) {
-					toast.success("Medicine registered successfully");
-				} else {
-					toast.error("Failed to register medicine");
-					console.error("RegisterMedicine error:", data);
+				if (!resp.ok) {
+					const errorData = await resp.json();
+					toast.error(errorData.msg || "Error al registrar medicamento");
+					return null;
 				}
+
+				return await resp.json();
 			},
 
 
@@ -149,6 +149,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					toast.error("Login error");
 				}
 			},
+
 			logout: () => {
 				localStorage.removeItem("token");
 				setStore({ token: null });
