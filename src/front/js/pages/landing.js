@@ -10,7 +10,7 @@ export const Landing = () => {
     const [formData, setFormData] = useState({ name: "", dosage: "", frequency: "" });
     const [medicines, setMedicines] = useState([]); // ← for the list
 
-    const [showForm, setShowForm] = useState(false)
+    const [showForm, setShowForm] = useState(false);
 
 
     const handleChange = (e) => {
@@ -42,6 +42,7 @@ export const Landing = () => {
             >
                 {showForm ? "Cancel" : "Add Medication"} +
             </button>
+
 
             {/* Conditional rendering of form */}
             {showForm && (

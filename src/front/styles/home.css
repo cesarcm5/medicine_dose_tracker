@@ -41,9 +41,7 @@ body {
 #login_text{
     color: white;
 }
-#logout {
-    margin-left: 900px;
-}
+
 #logout-button{
     background-color: #4CB944;
     border-radius: 15px;

@@ -15,7 +15,7 @@ export const Home = () => {
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		if (store.token && token && token !== "null" && token !== "undefined") {
-			navigate("/landing");
+			navigate("/home");
 		}
 	}, [store.token, navigate]);
 
