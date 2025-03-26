@@ -2,18 +2,32 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
+from flask_login import LoginManager, login_user, current_user
 from api.models import db, User, Medicine
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
+import re
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 api = Blueprint('api', __name__)
 
+login_manager = LoginManager()
+jwt = JWTManager()
+
 # Allow CORS requests to this API
 CORS(api)
 
+
+def validate_password(password):
+    if len(password) < 8:
+        return False
+    if len(re.findall(r"\d", password)) < 4:
+        return False
+    if not re.search(r"[A-Z]", password):
+        return False
+    return True
 
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
@@ -24,21 +38,6 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
-@api.route("/medicine", methods=['POST'])
-def register_medicine():
-    name = request.json.get("name", None)
-    dosage = request.json.get("dosage", None)
-    frequency = request.json.get("frequency", None)
-    user_id = request.json.get("user_id", None)
-    
-    if not all([name, dosage, frequency, user_id]):
-        return jsonify({"error":"Missing required field"}), 400
-    
-    medicine = Medicine(name=name, dosage=dosage, frequency=frequency, user_id=user_id)
-    db.session.add(medicine)
-    db.session.commit()
-    return jsonify(medicine.serialize()), 201
-    
 
 
 #MANTENER USUARIO LOGEADO
@@ -75,17 +74,17 @@ def login():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
     if email == None or password == None:
-        return jsonify({"msg": "Falta el correo o contraseña"}), 401
+        return jsonify({"msg": "Missing field"}), 401
     
     user = User.query.filter_by(email=email).first()
     if user == None:
         return jsonify({"msg": "User not found"}), 401
     
     if not check_password_hash(user.password, password):
-        return jsonify({"msg": "Contraseña incorrecta"}), 401
+        return jsonify({"msg": "Wrong password"}), 401
 
     # Generar un token de acceso si las credenciales son válidas
-    access_token = create_access_token(identity=user.email)
+    access_token = create_access_token(identity=str(user.id))
     return jsonify({"msg": "Inicio de sesión exitoso", "token": access_token, "user": user.serialize()}), 200
 
 
@@ -105,9 +104,10 @@ def signin():
     
     if email is None:
         return jsonify({"msg": "email field is missing"}), 401
-    
-    if password is None:
-        return jsonify({"msg": "password field is missing"}), 401
+       
+    if not validate_password(password):
+        return jsonify({"msg": "Password must be at least 8 characters long, include 4 digits, and at least one uppercase letter"}), 400
+
     
     user = User.query.filter_by(email=email).first()
     
@@ -121,3 +121,21 @@ def signin():
     db.session.commit()
 
     return jsonify({"user": new_user.serialize(), "token": create_access_token(identity=email)}), 200
+
+
+@api.route("/medicine", methods=['POST'])
+@jwt_required()
+def register_medicine():
+    name = request.json.get("name", None)
+    dosage = request.json.get("dosage", None)
+    frequency = request.json.get("frequency", None)
+    user_id = get_jwt_identity()
+    
+    if not all([name, dosage, frequency, user_id]):
+        return jsonify({"error":"Missing required field"}), 400
+    
+    medicine = Medicine(name=name, dosage=dosage, frequency=frequency, user_id=user_id)
+    db.session.add(medicine)
+    db.session.commit()
+    return jsonify(medicine.serialize()), 201
+    

@@ -7,10 +7,11 @@ import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import { Signin } from "./pages/signin";
+import { Medicines } from "./pages/medicines"
 import injectContext from "./store/appContext";
 import PrivateRoute from "./privateRouter";
 import { Landing } from "./pages/landing"
-import { Navbar } from "./component/navbar";
+import { Toaster } from "react-hot-toast";
 import { Footer } from "./component/footer";
 
 //create your first component
@@ -25,6 +26,7 @@ const Layout = () => {
         <div>
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
+                    <Toaster position="top-center" reverseOrder={false} />
                     <Routes>
                         <Route element={<Home />} path="/" />
                         <Route element={<Demo />} path="/demo" />
@@ -32,7 +34,15 @@ const Layout = () => {
                         <Route element={<h1>Not found!</h1>} />
                         <Route element={<Signin />} path="/signin" />
                         <Route
-                            path="/landing"
+                            path="/medicines"
+                            element={
+                                <PrivateRoute>
+                                    <Medicines />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/home"
                             element={
                                 <PrivateRoute>
                                     <Landing />

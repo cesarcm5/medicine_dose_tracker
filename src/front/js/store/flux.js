@@ -61,29 +61,49 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			// MEDICINES
-			RegisterMedicine: async (name, dosage, frequency, user_id) => {
-				const store = getStore();
+			RegisterMedicine: async (name, dosage, frequency) => {
+				const token = localStorage.getItem('token');
+
 				const resp = await fetch(process.env.BACKEND_URL + "api/medicine", {
 					method: "POST",
 					headers: {
-						"Content-type": "application/json"
+						"Authorization": `Bearer ${token}`,
+						"Content-Type": "application/json"
 					},
 					body: JSON.stringify({
 						name: name,
 						dosage: dosage,
-						frequency: frequency,
-						user_id: user_id || store.user?.id
+						frequency: frequency
 					})
 				});
+				if (resp.ok) {
+					toast.success("Medicine registered")
+				}
+				if (!resp.ok) {
+					const errorData = await resp.json();
+					toast.error(errorData.msg || "Error al registrar medicamento");
+					return null;
+				}
+
+				return await resp.json();
+			},
+
+			getMedicines: async () => {
+				const resp = await fetch(process.env.BACKEND_URL + "api/medicines", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": `Bearer ${getStore().token}` // si es necesario
+					}
+				});
+				if (!resp.ok) {
+					console.error("Failed to fetch medicines");
+					return;
+				}
 
 				const data = await resp.json();
-
-				if (resp.ok) {
-					toast.success("Medicine registered successfully");
-				} else {
-					toast.error("Failed to register medicine");
-					console.error("RegisterMedicine error:", data);
-				}
+				console.log("Medicines from backend:", data); // ← para verificar
+				setStore({ medicines: data });
 			},
 
 
@@ -107,17 +127,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				localStorage.setItem("token", data.token)
 
-				setStore({ user: data.user });
-				setStore({ token: data.token });
+				setStore({ user: data.user, token: data.token });
 
 
 				if (resp.ok) {
-					toast.success("Your usser has been logged");
-					toast("We've login for you",
-						{
-							duration: 5000,
-						}
-					);
+					toast.success("Your usser has been signed");
 				}
 				else {
 					toast.error("Signup error");
@@ -140,24 +154,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 					localStorage.setItem("token", data.token)
 					setStore({ token: data.token });
 					toast.success("Your usser has been logged");
-					toast("We've login for you",
-						{
-							duration: 5000,
-						}
-					);
 				} else {
 					toast.error("Login error");
 				}
 			},
+
 			logout: () => {
 				localStorage.removeItem("token");
 				setStore({ token: null });
 				toast.success("Your usser has been logout");
-				toast("We've logout for you",
-					{
-						duration: 5000,
-					}
-				);
 			},
 		}
 	};

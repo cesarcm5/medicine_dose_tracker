@@ -13,18 +13,21 @@ export const Navbar = () => {
 		navigate("/");
 	};
 	return (
-		<nav id="navbar" className="navbar">
-			<div className="flex">
-				<div className="flex">
-					<div>
-						<img id="pill" src={pill} />
-					</div>
-					<div className="pt-7">
-						<p id="name">PillCheck</p>
-					</div>
-					<div className="pl-auto">
-						<button onClick={handleLogout}>Log out</button>
-					</div>
+		<nav id="navbar" className="h-35 grid grid-rows-2">
+			<div className="flex pt-1">
+				<div>
+					<img id="pill" src={pill} />
+				</div>
+				<div className="pt-7">
+					<Link to="/home" id="name">PillCheck</Link>
+				</div>
+			</div>
+			<div className="flex justify-end items-center mb-18 mx-10">
+				<div className="mr-50 border-b border-white p-5">
+					<Link to="/medicines" className="text-white text-xl">Medicines</Link>
+				</div>
+				<div id="logout" className="">
+					<button id="logout-button" className="text-white" onClick={handleLogout}>Log out</button>
 				</div>
 			</div>
 		</nav>

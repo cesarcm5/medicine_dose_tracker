@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import Pill from "../../../../assets/medicine.png"
-import { Landing } from "./landing"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
@@ -16,7 +15,7 @@ export const Home = () => {
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		if (store.token && token && token !== "null" && token !== "undefined") {
-			navigate("/landing");
+			navigate("/home");
 		}
 	}, [store.token, navigate]);
 

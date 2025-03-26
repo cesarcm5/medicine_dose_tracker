@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import toast from "react-hot-toast";
 import { Navbar } from "../component/navbar";
 import { Context } from "../store/appContext";
 import "../../styles/home.css";
@@ -9,7 +10,7 @@ export const Landing = () => {
     const [formData, setFormData] = useState({ name: "", dosage: "", frequency: "" });
     const [medicines, setMedicines] = useState([]); // ← for the list
 
-    const [showForm, setShowForm] = useState(false)
+    const [showForm, setShowForm] = useState(false);
 
 
     const handleChange = (e) => {
@@ -41,6 +42,7 @@ export const Landing = () => {
             >
                 {showForm ? "Cancel" : "Add Medication"} +
             </button>
+
 
             {/* Conditional rendering of form */}
             {showForm && (

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export const Signin = () => {
     const { store, actions } = useContext(Context);
+
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -40,7 +41,7 @@ export const Signin = () => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token && token !== "null" && token !== "undefined") {
-            navigate({ Landing });
+            navigate("/home");
         }
     }, [store.token, navigate]);
 
@@ -86,6 +87,7 @@ export const Signin = () => {
                         className="text-white color-none mt-10 w-2/3 border border-solid outline-none mt-10 rounded-lg p-2"
                         onChange={handleChange}
                     />
+                    <p className="text-sm text-white font-thin">At least 8 characters and 4 digits and one uppercase </p>
                     <input
                         type="password"
                         name="passwordConfirm"
