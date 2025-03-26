@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import Pill from "../../../../assets/medicine.png"
-import { Landing } from "./landing"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";

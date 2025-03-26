@@ -7,6 +7,7 @@ from api.models import db, User, Medicine
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
+import re
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
@@ -18,6 +19,15 @@ jwt = JWTManager()
 # Allow CORS requests to this API
 CORS(api)
 
+
+def validate_password(password):
+    if len(password) < 8:
+        return False
+    if len(re.findall(r"\d", password)) < 4:
+        return False
+    if not re.search(r"[A-Z]", password):
+        return False
+    return True
 
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
@@ -64,14 +74,14 @@ def login():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
     if email == None or password == None:
-        return jsonify({"msg": "Falta el correo o contraseña"}), 401
+        return jsonify({"msg": "Missing field"}), 401
     
     user = User.query.filter_by(email=email).first()
     if user == None:
         return jsonify({"msg": "User not found"}), 401
     
     if not check_password_hash(user.password, password):
-        return jsonify({"msg": "Contraseña incorrecta"}), 401
+        return jsonify({"msg": "Wrong password"}), 401
 
     # Generar un token de acceso si las credenciales son válidas
     access_token = create_access_token(identity=str(user.id))
@@ -94,9 +104,10 @@ def signin():
     
     if email is None:
         return jsonify({"msg": "email field is missing"}), 401
-    
-    if password is None:
-        return jsonify({"msg": "password field is missing"}), 401
+       
+    if not validate_password(password):
+        return jsonify({"msg": "Password must be at least 8 characters long, include 4 digits, and at least one uppercase letter"}), 400
+
     
     user = User.query.filter_by(email=email).first()
     

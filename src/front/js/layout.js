@@ -10,7 +10,7 @@ import { Signin } from "./pages/signin";
 import injectContext from "./store/appContext";
 import PrivateRoute from "./privateRouter";
 import { Landing } from "./pages/landing"
-import { Navbar } from "./component/navbar";
+import { Toaster } from "react-hot-toast";
 import { Footer } from "./component/footer";
 
 //create your first component
@@ -25,6 +25,7 @@ const Layout = () => {
         <div>
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
+                    <Toaster position="top-center" reverseOrder={false} />
                     <Routes>
                         <Route element={<Home />} path="/" />
                         <Route element={<Demo />} path="/demo" />

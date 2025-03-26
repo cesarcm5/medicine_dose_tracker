@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import toast from "react-hot-toast";
 import { Navbar } from "../component/navbar";
 import { Context } from "../store/appContext";
 import "../../styles/home.css";
