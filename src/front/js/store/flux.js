@@ -104,7 +104,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const data = await resp.json();
 				console.log("Medicines from backend:", data); // ← para verificar
 				setStore({ medicines: data });
-			}
+			},
 
 
 			//USERS 
