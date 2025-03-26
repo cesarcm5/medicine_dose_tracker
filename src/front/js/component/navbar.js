@@ -22,8 +22,8 @@ export const Navbar = () => {
 					<div className="pt-7">
 						<p id="name">PillCheck</p>
 					</div>
-					<div className="pl-auto">
-						<button onClick={handleLogout}>Log out</button>
+					<div id="logout" className="mt-11">
+						<button id="logout-button" className="text-white" onClick={handleLogout}>Log out</button>
 					</div>
 				</div>
 			</div>
