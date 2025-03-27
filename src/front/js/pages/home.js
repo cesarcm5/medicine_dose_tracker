@@ -54,8 +54,6 @@ export const Home = () => {
 								const success = await actions.logIn(user.email, user.password);
 								if (success) {
 									navigate("/landing");
-								} else {
-									alert("Invalid credentials.");
 								}
 							}}
 							className="border-b text-green-300"
