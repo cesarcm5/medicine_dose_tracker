@@ -88,22 +88,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return await resp.json();
 			},
 
-			getMedicines: async () => {
-				const resp = await fetch(process.env.BACKEND_URL + "api/medicines", {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-						"Authorization": `Bearer ${getStore().token}` // si es necesario
-					}
-				});
-				if (!resp.ok) {
-					console.error("Failed to fetch medicines");
-					return;
-				}
+			GetMedicines: async () => {
+				const store = getStore();
+				try {
+					const resp = await fetch(process.env.BACKEND_URL + "api/medicines", {
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+							"Authorization": `Bearer ${store.token}`
+						}
+					});
 
-				const data = await resp.json();
-				console.log("Medicines from backend:", data); // ← para verificar
-				setStore({ medicines: data });
+					if (!resp.ok) {
+						const errorText = await resp.text();
+						console.error("Error fetching medicines:", errorText);
+						return;
+					}
+
+					const data = await resp.json();
+					console.log("Medicines loaded:", data);
+					setStore({ medicines: data });
+				} catch (err) {
+					console.error("Exception while fetching medicines:", err);
+				}
 			},
 
 

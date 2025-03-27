@@ -134,4 +134,16 @@ def register_medicine():
     db.session.add(medicine)
     db.session.commit()
     return jsonify(medicine.serialize()), 201
-    
+
+#Retrieve all medicines for a user
+
+@api.route("/medicines", methods=["GET"])
+@jwt_required()
+def get_user_medicines():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"msg": "User not found"}), 404
+
+    medicines = Medicine.query.filter_by(user_id=user.id).all()
+    return jsonify([m.serialize() for m in medicines]), 200
