@@ -23,10 +23,6 @@ CORS(api)
 def validate_password(password):
     if len(password) < 8:
         return False
-    if len(re.findall(r"\d", password)) < 4:
-        return False
-    if not re.search(r"[A-Z]", password):
-        return False
     return True
 
 @api.route('/hello', methods=['POST', 'GET'])
