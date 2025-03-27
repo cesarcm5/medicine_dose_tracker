@@ -35,7 +35,7 @@ export const Signin = () => {
         }
 
         await actions.signIn(formData.firstName, formData.lastName, formData.email, formData.password);
-        navigate("/landing");
+        navigate("/home");
     };
 
     useEffect(() => {
@@ -87,7 +87,7 @@ export const Signin = () => {
                         className="text-white color-none mt-10 w-2/3 border border-solid outline-none mt-10 rounded-lg p-2"
                         onChange={handleChange}
                     />
-                    <p className="text-sm text-white font-thin">At least 8 characters and 4 digits and one uppercase </p>
+                    <p className="text-sm text-white font-thin">Must contain at least 8 characters</p>
                     <input
                         type="password"
                         name="passwordConfirm"

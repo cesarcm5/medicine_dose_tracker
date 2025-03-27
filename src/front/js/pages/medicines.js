@@ -1,15 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Navbar } from "../component/navbar";
 
 export const Medicines = () => {
-    const { store, actions } = useContext(Context)
+    const { store, actions } = useContext(Context);
 
     useEffect(() => {
-        actions.getMedicines()
-        console.log("Medicines loaded:", store.medicines);
-    }, [])
-
+        // Llama a la acción para obtener los medicamentos solo una vez al montar el componente
+        actions.getMedicines();
+    }, [actions]); // Dependencia: solo se ejecuta cuando `actions` cambia
 
     return (
         <div>
@@ -31,5 +30,5 @@ export const Medicines = () => {
                 </div>
             </div>
         </div>
-    )
-}  
+    );
+};
