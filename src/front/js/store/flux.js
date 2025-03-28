@@ -88,6 +88,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return await resp.json();
 			},
 
+			DeleteMedicine: async (medicine_id) => {
+				const store = getStore();
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/medicine/${medicine_id}`, {
+						method: "DELETE",
+						headers: {
+							"Content-Type": "application/json",
+							"Authorization": `Bearer ${store.token}`
+						}
+					});
+					console.log(`URL de eliminación: ${response}`);
+					if (!response.ok) {
+						const errorText = await response.text();
+						console.error("Error deleting medicine:", errorText);
+						return;
+					}
+
+					const data = await response.json();
+					console.log("Medicine deleted:", data);
+					getActions().GetMedicines();
+				} catch (err) {
+					// Handle the error appropriately
+					console.error("Exception while deleting medicine:", err);
+				}
+			},
+
 			GetMedicines: async () => {
 				const store = getStore();
 				try {

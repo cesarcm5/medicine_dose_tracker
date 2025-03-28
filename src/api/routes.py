@@ -135,6 +135,19 @@ def register_medicine():
     db.session.commit()
     return jsonify(medicine.serialize()), 201
 
+@api.route("/medicine/<int:medicine_id>", methods=["DELETE"])
+@jwt_required()
+def delete_medicine(medicine_id):
+    user_id = get_jwt_identity()
+    medicine = Medicine.query.filter_by(id=medicine_id, user_id=int(user_id)).first()
+
+    if medicine is None:
+        return jsonify({"msg": "Medicine not found or you don't have permission to delete it"}), 404
+
+    db.session.delete(medicine)
+    db.session.commit()
+    return jsonify({"msg": "Medicine deleted successfully"}), 200
+
 #Retrieve all medicines for a user
 
 @api.route("/medicines", methods=["GET"])
