@@ -116,7 +116,7 @@ def signin():
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({"user": new_user.serialize(), "token": create_access_token(identity=email)}), 200
+    return jsonify({"user": new_user.serialize(), "token": create_access_token(identity=str(new_user.id))}), 200
 
 
 @api.route("/medicine", methods=['POST'])
@@ -141,7 +141,7 @@ def register_medicine():
 @jwt_required()
 def get_user_medicines():
     user_id = get_jwt_identity()
-    user = User.query.get(user_id)
+    user = User.query.get(int(user_id))
     if not user:
         return jsonify({"msg": "User not found"}), 404
 

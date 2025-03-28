@@ -19,8 +19,8 @@ export const Medicines = () => {
                     store.medicines.map((medicine, index) => (
                         <div key={index} className="border rounded-lg shadow p-4 bg-white">
                             <h2 className="text-xl font-semibold">{medicine.name}</h2>
-                            <p>Dosis: {medicine.dosage} mg</p>
-                            <p>Frecuencia: {medicine.frequency} veces/día</p>
+                            <p>Dosage: {medicine.dosage} mg</p>
+                            <p>Frequency: {medicine.frequency} veces/día</p>
                         </div>
                     ))
                 ) : (
