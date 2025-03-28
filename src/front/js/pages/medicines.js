@@ -1,9 +1,14 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
+import { Footer } from "../component/footer";
 import { Navbar } from "../component/navbar";
 
 export const Medicines = () => {
     const { store, actions } = useContext(Context);
+
+    const handleDelete = (id) => {
+        actions.DeleteMedicine(id)
+    }
 
     useEffect(() => {
         actions.GetMedicines();
@@ -21,12 +26,16 @@ export const Medicines = () => {
                             <h2 className="text-xl font-semibold">{medicine.name}</h2>
                             <p>Dosage: {medicine.dosage} mg</p>
                             <p>Frequency: {medicine.frequency} veces/día</p>
+                            <button onClick={() => handleDelete(medicine.id)}>
+                                <i className="fa-solid fa-trash"></i>
+                            </button>
                         </div>
                     ))
                 ) : (
                     <p className="text-center text-gray-500">No tienes medicamentos registrados.</p>
                 )}
             </div>
+
         </div>
     );
 };
