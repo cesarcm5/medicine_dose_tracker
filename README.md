@@ -1,4 +1,4 @@
-# 🩺 Medicine Dose Tracker
+# 🩺 PillCheck
 
 Medicine Dose Tracker is a full-stack web application that allows users to manage their personal medications. Users can securely register, log in, and perform CRUD operations on their medicine records.
 
