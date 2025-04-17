@@ -21,7 +21,7 @@ class User(db.Model):
 
 
     def __repr__(self):
-        return f'<User {self.email}>'
+        return f'<User {self.email} id: {self.id} {self.medicines}>'
     
 
     def serialize(self):
