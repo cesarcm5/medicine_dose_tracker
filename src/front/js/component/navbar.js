@@ -13,18 +13,18 @@ export const Navbar = () => {
 		navigate("/");
 	};
 	return (
-		<nav id="navbar" className="h-35 grid grid-rows-2">
-			<div className="flex pt-1">
+		<nav id="navbar" className="h-35 flex md:grid md:grid-rows-2">
+			<div className="flex pt-8 md:pt-1">
 				<div>
 					<img id="pill" src={pill} />
 				</div>
-				<div className="pt-7">
+				<div className="pt-6 md:pt-7">
 					<Link to="/home" id="name">PillCheck</Link>
 				</div>
 			</div>
-			<div className="flex justify-end items-center mb-18 mx-10">
-				<div className="mr-50 border-b border-white p-5">
-					<Link to="/medicines" className="text-white text-xl">Medicines</Link>
+			<div id="control" className="md:flex md:justify-end md:items-center md:mb-18 md:mx-10">
+				<div className="md:mr-50 ml-2 md:border-b md:border-white md:p-5">
+					<Link to="/medicines" className="text-white md:text-xl">Medicines</Link>
 				</div>
 				<div id="logout" className="">
 					<button id="logout-button" className="text-white" onClick={handleLogout}>Log out</button>

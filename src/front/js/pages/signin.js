@@ -46,15 +46,15 @@ export const Signin = () => {
     }, [store.token, navigate]);
 
     return (
-        <div>
-            <div id="login" className="w-35/100 justify-self-center mt-15">
+        <div className="">
+            <div id="login" className="w-90/100 md:w-35/100 justify-self-center mt-10">
                 <div className="justify-items-center">
                     <img id="pill" src={Pill} />
                 </div>
                 <div>
                     <p id="login_text" className="text-center text-3xl">Log In</p>
                 </div>
-                <form onSubmit={handleSubmit} id="credentials" className="pl-32 flex flex-col gap-y-4">
+                <form onSubmit={handleSubmit} id="credentials" className="mt-5 pl-23 md:pl-32 flex flex-col gap-y-4">
                     <input
                         type="text"
                         name="firstName"
