@@ -114,6 +114,35 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			EditMedicine: async (medicine_id, updatedFields) => {
+				const store = getStore();
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/medicine/${medicine_id}`, {
+						method: "PUT",
+						headers: {
+							"Content-Type": "application/json",
+							"Authorization": `Bearer ${store.token}`
+						},
+						body: JSON.stringify(updatedFields)
+					});
+
+					if (!response.ok) {
+						const errorText = await response.text();
+						console.error("Error editing medicine:", errorText);
+						toast.error("Error editing medicine");
+						return;
+					}
+
+					const data = await response.json();
+					console.log("Medicine edited:", data);
+					toast.success("Medicine updated successfully");
+					getActions().GetMedicines();
+				} catch (err) {
+					console.error("Exception while editing medicine:", err);
+					toast.error("Error editing medicine");
+				}
+			},
+
 			GetMedicines: async () => {
 				const store = getStore();
 				try {
